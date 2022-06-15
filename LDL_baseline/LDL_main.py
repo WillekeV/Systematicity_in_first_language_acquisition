@@ -7,7 +7,7 @@ import random
 import copy
 from datetime import datetime
 from cross_mapping import cross_mapping
-from cosine_similarity import compute_cosine_similarity
+from cosine_distance import compute_cosine_similarity
 
 random_baseline = True
 
@@ -44,16 +44,6 @@ def write_df(targets, out_path, full_cossim, produced_cossim, most_cossim, wordc
 
 if __name__ == '__main__':
 
-    ldl_dir_rnd = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/LDL_output_dir/random_baselines"
-    reference_NDL_spaces_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/NDL/Reference_NDL_spaces"
-    target_NDL_spaces_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/NDL/Target_NDL_spaces"
-    produced_reference_NDL_spaces_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/NDL/Produced_reference_NDL_spaces"
-    reference_form_spaces_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/FormEmbeddings/Reference_form_spaces"
-    target_form_spaces_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/FormEmbeddings/Target_form_spaces"
-    reference_wordcount_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/Wordcounts_reference"
-    target_wordcount_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/Wordcounts_targets"
-
-    '''
     #ask for the path to the map in which all file will be stored
     ldl_dir_rnd = input("Please provide a path to a map where all output will be stored\n") 
     if not os.path.exists(ldl_dir_rnd):
@@ -87,7 +77,6 @@ if __name__ == '__main__':
     target_wordcount_filebase = input("Please provide the path to the directory where all target wordcounts are stored\n") 
     if not os.path.exists(target_wordcount_filebase):
         raise ValueError("This directory does not exist, please provide a valid path!")
-    '''
 
     reference_NDL_filelist = os.listdir(reference_NDL_spaces_filebase)
     target_NDL_filelist = os.listdir(target_NDL_spaces_filebase)
