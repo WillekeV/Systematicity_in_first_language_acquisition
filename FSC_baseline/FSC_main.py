@@ -13,15 +13,6 @@ random_baseline = True
 
 if __name__ == '__main__':
 
-    '''
-    reference_w2v_space_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/Reference_w2v_spaces"
-    target_w2v_space_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/Target_w2v_spaces"
-    produced_reference_w2v_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/Reference_w2v_spaces"
-    reference_wordcounts_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/Wordcounts_reference"
-    target_wordcounts_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/Wordcounts_targets"
-    fsc_dir_rnd = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC_output_dir/random_baselines"
-
-    '''
     #ask for the path to the map in which all file will be stored
     fsc_dir_rnd = input("Please provide a path to a map where all output will be stored\n")
     if not os.path.exists(fsc_dir_rnd):
@@ -150,24 +141,24 @@ if __name__ == '__main__':
                 print(datetime.now().strftime("%d/%m/%Y %H:%M:%S: Started permutation {} of {}...".format(i + 1, n_subsamples)))
                 random_reference.vectors = np.random.permutation(random_reference.vectors)
 
-                #full_t2OSC_ld_rnd = levenshtein_fsc(full_ortho2neighbors_ld, random_embeddings, reference_space)
+                full_t2OSC_ld_rnd = levenshtein_fsc(full_ortho2neighbors_ld, random_embeddings, reference_space)
                 produced_t2OSC_ld_rnd = levenshtein_fsc(produced_ortho2neighbors_ld, embedding_space, random_reference)
-                #most_t2OSC_ld_rnd = levenshtein_fsc(most_ortho2neighbors_ld, random_embeddings, reference_space)
+                most_t2OSC_ld_rnd = levenshtein_fsc(most_ortho2neighbors_ld, random_embeddings, reference_space)
 
                 values = []
 
                 for word in targets:
                     values.append(
-                        [word, produced_t2OSC_ld_rnd[word]] #full_t2OSC_ld_rnd[word], most_t2OSC_ld_rnd[word]
+                        [word, full_t2OSC_ld_rnd[word], produced_t2OSC_ld_rnd[word], most_t2OSC_ld_rnd[word]] 
                     )
 
-                #full = "full_OSC_rnd" + str(i+1)
+                full = "full_OSC_rnd" + str(i+1)
                 produced = "produced_OSC_rnd" + str(i+1)
-                #most = "most_OSC_rnd" + str(i+1)
+                most = "most_OSC_rnd" + str(i+1)
                 
                 df = pd.DataFrame(
                     data = values,
-                    columns = ["word", produced] #full, produced
+                    columns = ["word", full, produced, most]
                 )
 
                 final_df = pd.merge(final_df, df, on = "word")
