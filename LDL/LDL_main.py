@@ -37,16 +37,39 @@ def write_df(targets, out_path, produced_cossim, wordcount, reference_size): # d
 
 if __name__ == '__main__':
 
-    ldl_dir = "/home/gcassani/systematicity-zeroshot/output_data/ldl/true_ldl_values/"
-    if not os.path.exists(ldl_dir):
-        os.makedirs(ldl_dir)
-    reference_NDL_spaces_filebase = "/home/gcassani/systematicity-zeroshot/Reference_NDL_spaces"
-    target_NDL_spaces_filebase = "/home/gcassani/systematicity-zeroshot/Target_NDL_spaces"
-    produced_reference_NDL_spaces_filebase = "/home/gcassani/systematicity-zeroshot/Produced_reference_NDL_spaces"
-    reference_form_spaces_filebase = "/home/gcassani/systematicity-zeroshot/Reference_form_spaces"
-    target_form_spaces_filebase = "/home/gcassani/systematicity-zeroshot/Target_form_spaces"
-    reference_wordcount_filebase = "/home/gcassani/systematicity-zeroshot/Wordcounts_reference"
-    target_wordcount_filebase = "/home/gcassani/systematicity-zeroshot/Wordcounts_targets"
+    #ask for the path to the map in which all file will be stored
+    ldl_dir_rnd = input("Please provide a path to a map where all output will be stored\n") 
+    if not os.path.exists(ldl_dir_rnd):
+        raise ValueError("This directory does not exist, please provide a valid path!")
+
+    #ask for all files needed for the computations
+    reference_NDL_spaces_filebase = input("Please provide the path to the directory where all reference NDL spaces are stored\n") 
+    if not os.path.exists(reference_NDL_spaces_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
+
+    target_NDL_spaces_filebase = input("Please provide the path to the directory where all target NDL spaces are stored\n") 
+    if not os.path.exists(target_NDL_spaces_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
+
+    produced_reference_NDL_spaces_filebase = input("Please provide the path to the directory where all produced reference NDL spaces are stored\n") 
+    if not os.path.exists(produced_reference_NDL_spaces_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
+
+    reference_form_spaces_filebase = input("Please provide the path to the directory where all reference form embeddings are stored\n")
+    if not os.path.exists(reference_form_spaces_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
+
+    target_form_spaces_filebase = input("Please provide the path to the directory where all target form embeddings are stored\n")
+    if not os.path.exists(target_form_spaces_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
+
+    reference_wordcount_filebase = input("Please provide the path to the directory where all reference wordcounts are stored\n") 
+    if not os.path.exists(reference_wordcount_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
+
+    target_wordcount_filebase = input("Please provide the path to the directory where all target wordcounts are stored\n") 
+    if not os.path.exists(target_wordcount_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
 
     reference_NDL_filelist = sorted(os.listdir(reference_NDL_spaces_filebase))
     target_NDL_filelist = sorted(os.listdir(target_NDL_spaces_filebase))
