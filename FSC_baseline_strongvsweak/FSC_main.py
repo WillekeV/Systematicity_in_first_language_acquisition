@@ -13,26 +13,32 @@ from fsc_ld_linux import levenshtein_fsc
 from fsc_ld_full_linux import levenshtein_fsc_full
 
 if __name__ == '__main__':
+       
+    #ask for the path to the map in which all file will be stored
+    fsc_dir_strongvsweak = input("Please provide a path to a map where all output will be stored\n")
+    if not os.path.exists(fsc_dir_rnd):
+        raise ValueError("This directory does not exist, please provide a valid path!")
 
+    #ask for all files needed for the computations
+    reference_w2v_space_filebase = input("Please provide the path to the directory where all reference w2v spaces are stored\n") 
+    if not os.path.exists(reference_w2v_space_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
 
-    reference_w2v_space_filebase = "/home/gcassani/systematicity-zeroshot/Reference_w2v_spaces"
-    target_w2v_space_filebase = "/home/gcassani/systematicity-zeroshot/Target_w2v_spaces"
-    produced_reference_w2v_filebase = "/home/gcassani/systematicity-zeroshot/Produced_reference_w2v_spaces"
-    reference_wordcounts_filebase = "/home/gcassani/systematicity-zeroshot/Wordcounts_reference"
-    target_wordcounts_filebase = "/home/gcassani/systematicity-zeroshot/Wordcounts_targets"
-    fsc_dir_strongvsweak = "/home/gcassani/systematicity-zeroshot/output_data/fsc/strongvsweak"
-    if not os.path.exists(fsc_dir_strongvsweak):
-        os.makedirs(fsc_dir_strongvsweak)
+    target_w2v_space_filebase = input("Please provide the path to the directory where all target w2v spaces are stored\n") 
+    if not os.path.exists(target_w2v_space_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
 
+    produced_reference_w2v_filebase = input("Please provide the path to the directory where all produced reference w2v spaces are stored\n") 
+    if not os.path.exists(produced_reference_w2v_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
 
-    '''
-    reference_w2v_space_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/Reference_w2v_spaces"
-    target_w2v_space_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/Target_w2v_spaces"
-    produced_reference_w2v_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/Produced_Reference_w2v_spaces"
-    reference_wordcounts_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/Wordcounts_reference"
-    target_wordcounts_filebase = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/Wordcounts_targets"
-    fsc_dir_strongvsweak = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC_output_dir/strongvsweak_baselines"
-    '''
+    reference_wordcounts_filebase = input("Please provide the path to the directory where all reference wordcounts are stored\n") 
+    if not os.path.exists(reference_wordcounts_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
+
+    target_wordcounts_filebase = input("Please provide the path to the directory where all target wordcounts are stored\n") 
+    if not os.path.exists(target_wordcounts_filebase):
+        raise ValueError("This directory does not exist, please provide a valid path!")
 
     reference_w2v_filelist = sorted(os.listdir(reference_w2v_space_filebase))
     target_w2v_filelist = sorted(os.listdir(target_w2v_space_filebase))
