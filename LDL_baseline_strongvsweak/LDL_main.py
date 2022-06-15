@@ -8,7 +8,7 @@ import string
 import itertools
 from datetime import datetime
 from cross_mapping import cross_mapping
-from cosine_similarity_linux import compute_cosine_similarity
+from cosine_distance import compute_cosine_similarity
 
 def write_df(targets, out_path, cossim): # d_target_phon, d_morph # +month of bin, measure column, size of reference vocab, covariates (compute on reference for targets, things like frequency, snd, etc.)
 
