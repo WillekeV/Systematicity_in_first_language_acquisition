@@ -10,7 +10,7 @@ from semspaces.space import SemanticSpace
 from datetime import datetime
 from celex import get_celex_coverage
 from neighbors import get_levenshtein_neighbours
-from fsc_ld import levenshtein_fsc
+from fsc_ld import levenshtein_fsc #use fsc_ld_linux if not working on windows
 from semantic import neighborhood_density
 from resources import aoa, concreteness, valence, morpholex
 from compute_old20 import calculate_old20
@@ -146,50 +146,58 @@ def write_df(targets, out_path, full_d_OSC_ld, produced_d_OSC_ld, most_d_OSC_ld,
 if __name__ == '__main__':
 
     #ask for the target embedding space file. First line of the file should be the size (for example 10000 300).
-    embedding_space_file = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/W2VChildDirected30.txt" #input("Please provide the path file in which the target embedding space is stored.\n") #D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/W2VChildDirected30.txt
+    embedding_space_file = input("Please provide the path file in which the target embedding space is stored.\n") 
     if not os.path.exists(embedding_space_file):
         raise ValueError("The file does not exist, please provide a valid file!")
 
     #ask for the reference embedding space file. First line of the file should be the size (for example 10000 300).
-    reference_space_file = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/W2VChildDirected24.txt" #input("Please provide the path file in which the reference embedding space is stored.\n") #D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/W2VChildDirected24.txt
+    reference_space_file = input("Please provide the path file in which the reference embedding space is stored.\n") 
     if not os.path.exists(reference_space_file):
         raise ValueError("The file does not exist, please provide a valid file!")
 
     #ask for the child-produced reference embedding space file. First line of the file should be the size (for example 10000 300).
-    child_produced_space_file = "D:/UniversiteitNijmegen/Thesis/Test/Processed/Word2Vec/W2VChildProduced24.txt"
+    child_produced_space_file = input("Please provide the path file in which the child-produced-reference embedding space is stored.\n") 
     if not os.path.exists(child_produced_space_file):
         raise ValueError("The file does not exist, please provide a valid file!")
 
     #ask for the file containing a dictionary of wordcounts for all words in the target vocab. It should also include the age of the child and if the speech is directed or produced.
-    wordcount_file = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/WordCountChildDirected30.json" #input("Please provide the path to the file containing wordcounts for all words in the target embedding space. \n")
+    wordcount_file = input("Please provide the path to the file containing wordcounts for all words in the target embedding space. \n")
     if not os.path.exists(wordcount_file):
         raise ValueError("This directory does not exist, please provide a valid path!") 
 
     #ask for the file containing a dictionary of wordcounts for all the words in the reference vocab.
-    wordcount_file_reference = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/WordCountChildDirected24.json" #input("Please provide the path to the file containing wordcounts for all words in the reference embedding space. \n")
+    wordcount_file_reference = input("Please provide the path to the file containing wordcounts for all words in the reference embedding space. \n")
     if not os.path.exists(wordcount_file_reference):
         raise ValueError("This directory does not exist, please provide a valid path!")
 
     #ask for the morpholex file
-    morpholex_file = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC/MorphoLEX_en.xlsx" #input("Please provide the path to the file containing the morpholex data.\n") #C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC/MorphoLEX_en.xlsx
+    morpholex_file = C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC/MorphoLEX_en.xlsx
     if not os.path.exists(morpholex_file):
         raise ValueError("The file does not exist, please provide a valid file!")
 
     #ask for the Celex dictionary file
-    celex_file = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/CELEX/ENGLISH/celex_dict.json" #input("Please provide the path to the file containing the celex dictionary.\n") #C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/CELEX/ENGLISH/celex_dict.json
+    celex_file = input("Please provide the path to the file containing the celex dictionary.\n") 
     if not os.path.exists(celex_file):
         raise ValueError("The file does not exist, please provide a valid file!")
+        
+    aoa_produced_file = input("Please provide the path to the file containing the mapping to when the child first produced the word.\n") 
+    if not os.path.exists(aoa_produced_file):
+        raise ValueError("The file does not exist, please provide a valid file!")
+        
+    aoa_file = input("Please provide the path to the file containing the mapping to AoA ratings.\n") 
+    if not os.path.exists(aoa_file):
+        raise ValueError("The file does not exist, please provide a valid file!")
 
-    aoa_produced_file = "D:/UniversiteitNijmegen/Thesis/Test/Processed/WordCounts/AoAProduced.json"
+    concreteness_file = input("Please provide the path to the file containing the mapping to concreteness ratings.\n") 
+    if not os.path.exists(concreteness_file):
+        raise ValueError("The file does not exist, please provide a valid file!")
 
-    aoa_file = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC/AoA.xlsx"
-
-    concreteness_file = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC/concreteness.txt"
-
-    valence_file = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC/valence.csv"
+    valence_file = input("Please provide the path to the file containing the mapping to valence ratings.\n") 
+    if not os.path.exists(valence_file):
+        raise ValueError("The file does not exist, please provide a valid file!")
 
     #ask for the path to the map in which all file will be stored
-    fsc_dir = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC_output_dir" #input("Please provide a path to a map where all output will be stored") #C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC_output_dir
+    fsc_dir = input("Please provide a path to a map where all output will be stored") 
     if not os.path.exists(fsc_dir):
         raise ValueError("This directory does not exist, please provide a valid path!")
 
@@ -376,42 +384,4 @@ if __name__ == '__main__':
     filename = "fsc_measures" + str(age_bin) + ".csv"
     write_df(target_vocab, os.path.join(fsc_dir, filename), full_t2OSC_ld, produced_t2OSC_ld, most_t2OSC_ld, full_t2snd, produced_t2snd, most_t2snd,
              wordcount, measure, size_of_reference_full, size_of_reference_produced, size_of_reference_most, embedding_type, w2concr, w2val, w2morph, w2aoa, aoa_produced,
-             full_old20, produced_old20, most_old20) #t2phon, w2morph
-
-
-
-
-    if random_baseline:
-
-        n_subsamples = 3
-        seeds = random.sample(range(0, 100000000), n_subsamples)
-        print(datetime.now().strftime(
-            "%d/%m/%Y %H:%M:%S: Started computing FSC from {} random permutations of the embeddings...".format(n_subsamples)
-        ))
-
-        # COMPUTE FSC MEASURES FROM RANDOM PERMUTATIONS OF THE WORD EMBEDDINGS, REPEAT 1000 TIMES AND SAVE MEASURES TO FILE
-        random_embeddings = copy.deepcopy(embedding_space)
-        fsc_dir_rnd = "C:/Users/wgvan/Documents/Universiteit_Nijmegen/jaar2/thesis/Project_Code/FSC_output_dir/random_baselines"
-        if not os.path.exists(fsc_dir_rnd):
-            os.makedirs(fsc_dir_rnd)
-
-        for i, seed in enumerate(seeds):
-            np.random.seed(seed)
-            print(datetime.now().strftime("%d/%m/%Y %H:%M:%S: Started permutation {} of {}...".format(i + 1, n_subsamples)))
-            random_embeddings.vectors = np.random.permutation(random_embeddings.vectors)
-
-            full_t2OSC_ld_rnd = levenshtein_fsc(full_ortho2neighbors_ld, random_embeddings, reference_space)
-            produced_t2OSC_ld_rnd = levenshtein_fsc(produced_ortho2neighbors_ld, random_embeddings, reference_space)
-            most_t2OSC_ld_rnd = levenshtein_fsc(most_ortho2neighbors_ld, random_embeddings, reference_space)
-
-            filename = "random_baseline" + str(age_bin) + "_num{}.csv".format(i+1)
-            
-            write_df(target_vocab, os.path.join(fsc_dir_rnd, filename), full_t2OSC_ld_rnd, produced_t2OSC_ld_rnd, most_t2OSC_ld_rnd, full_t2snd, produced_t2snd, most_t2snd,
-                wordcount, measure, size_of_reference_full, size_of_reference_produced, size_of_reference_most, embedding_type, w2concr, w2val, w2morph, w2aoa, aoa_produced,
-                full_old20, produced_old20, most_old20)
-
-    
-
-
-
-    
+             full_old20, produced_old20, most_old20) 
