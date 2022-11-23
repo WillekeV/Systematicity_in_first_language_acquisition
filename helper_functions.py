@@ -4,6 +4,9 @@ import os
 import pandas as pd
 from gensim.models.fasttext import FastText
 from gensim.models import Word2Vec
+from semspaces.space import SemanticSpace
+import space
+import nltk
 
 #function to make NDL training data, consisting of two lists of the same tokens
 def make_NDL_training_data(filename_list):
@@ -242,9 +245,111 @@ def AoA_mapping(wordcountname_list):
         name = "AoAProduced.json"
         json.dump(child_produced_AoA, open(os.path.join(wordcountname_list, name), 'w'))
 
+#function to make average vispa vectors, since each word has 5 vision vectors corresponding to it
+def make_vispa_average_vectors(vispa_file):
+    
+    vispa = pd.read_csv(vispa_file, sep = " ")
+    
+    vispa_words_long = vispa['A_100Q'].tolist()
+    
+    vispa_words = []
+    for word in vispa_words_long:
+        head, sep, tail = word.partition("_")
+        x = head
+        if x not in vispa_words:
+            vispa_words.append(x)
+            
+    vispa["A_100Q"] = vispa["A_100Q"].str.split('_').str.get(0)
+    res = vispa.groupby(['A_100Q'], as_index=False).mean()
+    res['A_100Q'] = res['A_100Q'].str.lower()
+    
+    with open('VispaAverageVectors.txt', 'w') as f:
+        f.write(str(res.shape[0]))
+        f.write(" ")
+        f.write(str(res.shape[1]))
+        f.write('\n')
+        f.close()
+    res.to_csv(r'VispaAverageVectors.txt', index = False, header = False, sep = ' ', mode = 'a')
+    
+#function to make the vision vector, semantic vector and word list files for each age-bin needed for the neural networks        
+def make_vision_NN_data(childes_filelist, semantic_filelist, vision_vectors):
+    
+    namelist = []
+    namelist.append("word")
+    for i in range(1,401):
+        name = "value" + str(i)
+        namelist.append(name)
+    
+    namelist2 = []
+    namelist2.append("word")
+    for i in range(1, 101):
+        name = "value" + str(i)
+        namelist2.append(name)
+    
+    childes_list = sorted(os.listdir(childes_filelist))
+    semantic_list = sorted(os.listdir(semantic_filelist))
+    vispa = pd.read_csv(vision_vectors, sep = " ", names = namelist)
+    
+    for i in len(childes_list):
+        with open(os.path.join(childes_filelist, childes_list[i]), 'r') as file:
+            childes = json.load(file)
+        with open(os.path.join(semantic_filelist, semantic_list[i]), 'r') as file1:
+            wordvectors = json.load(file1)
+            
+        vispa_words = vispa["word"].tolist()
+        childes_words = childes["word"].tolist()
+        vector_words = wordvectors["word"].tolist()
 
+        wordlist = []
+        word_dict = {}
+        counter = 0
+        for word in childes_words:
+            original = word
+            for letter in word:
+                if letter in string.punctuation:
+                    counter += 1
+                    word = word.replace(letter, "")
+            wordlist.append(word)
+            word_dict[word] = original
+            
+        sp = spacy.load("en_core_web_sm")
+        childes_words_lemmatized = []
+        lemmatized_dict = {}
+        sentence = ' '.join(wordlist)
+        sentence = sp(sentence)
+        for word in sentence:
+            word_toadd = word.lemma_
+            #if word_toadd not in childes_words_lemmatized:
+            childes_words_lemmatized.append(word_toadd)
+            lemmatized_dict[word_toadd] = word
 
+        final_wordlist = []
 
+        for word in childes_words_lemmatized:
+            if word in vispa_words:
+                final_wordlist.append(word)
+                
+        semantic_vectors = []
+        vision_vectors = []
+        for word in final_wordlist:
+            vispa_row = vispa.loc[vispa["word"] == word].values.flatten().tolist()
+            vispa_row.pop(0)
+            vision_vectors.append(vispa_row)
+            if word in vector_words:
+                childes_row = wordvectors.loc[wordvectors["word"] == word].values.flatten().tolist()
+            elif word in wordlist:
+                childes_row = wordvectors.loc[wordvectors["word"] == str(lemmatized_dict[word])].values.flatten().tolist()
+            else:
+                to_search = str(lemmatized_dict[word])
+                childes_row = wordvectors.loc[wordvectors["word"] == str(word_dict[to_search])].values.flatten().tolist()
+            childes_row.pop(0)
+            semantic_vectors.append(childes_row)
+            
+        savetxt("words.csv", final_wordlist, delimiter=",", fmt='%s')
+        savetxt("semantic_vectors.csv", semantic_vectors, delimiter = ",")
+        savetxt("vision_vectors.csv", vision_vectors, delimiter = ",")
+            
+    
 if __name__ == '__main__':  
 
     NDL_filelist = '' #input the name of the directory you store all your corpus extracted files in
@@ -259,6 +364,12 @@ if __name__ == '__main__':
     make_fasttext_vectors(WordVector_filelist)
     make_word2vec_vectors(WordVector_filelist)
     wordcounter(WordVector_filelist)
+    
+    make_average_vispa_vectors(vispa_file) #input the path to the vispa vector file here
+    childes_filelist = '' #input the name of the directory you store all your files in that contain all words for each age-bin
+    semantic_filelist = '' #input the name of the directory you store all your files containing the semantic vectors for each age-bin
+    vision_vectors = '' #input the path of the file containing the average vispa vectors here
+    make_vision_NN_data(childes_filelist, semantic_filelist, vision_vectors)
 
 
     
